@@ -6,53 +6,51 @@
 //
 
 import UIKit
-
-class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
-    }
+import RxSwift
+import RxCocoa
+class ProfileViewController: UIViewController {
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "item", for: indexPath) as! TableViewCell
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        60
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let photosVC = PhotosViewController(nibName: "PhotosViewController", bundle: nil)
-        self.navigationController?.pushViewController(photosVC, animated: true)
-    }
     
     @IBOutlet weak var userName: UILabel!
     
     
-    @IBOutlet weak var Address: UILabel!
+    @IBOutlet weak var userAddress: UILabel!
     
     
     @IBOutlet weak var albumsTableView: UITableView!
     
-    
+    private var viewModel = ProfileViewModel()
+    var bag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let randomNumber = Int.random(in: 1 ... 10 )
         albumsTableView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "item")
-        albumsTableView.dataSource = self
-        albumsTableView.delegate = self
         title = "Profile"
+        viewModel.getUser(id: randomNumber)
+        viewModel.getAlbums(forUserId: randomNumber)
+        viewModel.userResponse.subscribe({[weak self] user in
+            guard let self = self else{return}
+            self.userName.text = user.element?.name
+            var address:Address = Address(street: "", suite: "", city: "", zipcode: "")
+            address = user.element?.address ?? Address(street: "", suite: "", city: "", zipcode: "")
+            self.userAddress.text = (address.street ?? "") + (address.suite ?? "") + (address.city ?? "") + (address.zipcode ?? "")
+        }
+        ).disposed(by: bag)
+        bindDataToTableView()
+        
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func bindDataToTableView(){
+        viewModel.albumResponse.bind(to: albumsTableView.rx.items(cellIdentifier: "item",cellType: TableViewCell.self)){row,item,cell in
+            cell.title.text = item.title
+        }.disposed(by: bag)
+        
+        albumsTableView.rx.modelSelected(AlbumModel.self).bind{ album in
+            let photosViewController = PhotosViewController(nibName: "PhotosViewController", bundle: nil)
+            photosViewController.albumId = album.id
+            self.navigationController?.pushViewController(photosViewController, animated: true)
+            
+        }
     }
-    */
 
 }

@@ -20,6 +20,7 @@ class PhotosViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     let searchController = UISearchBar()
     
+    var albumId : Int?
     
     @IBOutlet weak var photosCollectionView: UICollectionView!
     override func viewDidLoad() {

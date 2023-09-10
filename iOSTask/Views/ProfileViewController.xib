@@ -10,8 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileViewController" customModule="iOSTask" customModuleProvider="target">
             <connections>
-                <outlet property="Address" destination="Qhe-kt-5G5" id="haU-eb-o83"/>
                 <outlet property="albumsTableView" destination="9qy-y4-aAb" id="UmA-6o-4CP"/>
+                <outlet property="userAddress" destination="Qhe-kt-5G5" id="Ojb-iq-mlM"/>
                 <outlet property="userName" destination="pkw-1Q-Vvg" id="J43-u6-nWa"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -26,7 +26,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="73" id="gLF-z8-rsW"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="29"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -35,13 +35,12 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="73" id="BE9-Gq-U7K"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="9qy-y4-aAb">
-                    <rect key="frame" x="16" y="221" width="361" height="597"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="9qy-y4-aAb">
+                    <rect key="frame" x="16" y="294" width="361" height="524"/>
                 </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
@@ -49,7 +48,7 @@
             <constraints>
                 <constraint firstItem="9qy-y4-aAb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="4Er-bz-1jX"/>
                 <constraint firstItem="Qhe-kt-5G5" firstAttribute="top" secondItem="pkw-1Q-Vvg" secondAttribute="bottom" constant="8" symbolic="YES" id="8eb-RN-TGC"/>
-                <constraint firstItem="9qy-y4-aAb" firstAttribute="top" secondItem="Qhe-kt-5G5" secondAttribute="bottom" constant="8" symbolic="YES" id="9rb-GU-xjs"/>
+                <constraint firstItem="9qy-y4-aAb" firstAttribute="top" secondItem="Qhe-kt-5G5" secondAttribute="bottom" constant="81" id="9rb-GU-xjs"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Qhe-kt-5G5" secondAttribute="trailing" constant="16" id="Kif-pQ-C4H"/>
                 <constraint firstItem="Qhe-kt-5G5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="XfA-DQ-iYA"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="pkw-1Q-Vvg" secondAttribute="trailing" constant="16" id="dCD-dL-5bq"/>
@@ -62,9 +61,6 @@
         </view>
     </objects>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="tertiarySystemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
