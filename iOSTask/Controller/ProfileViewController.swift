@@ -50,7 +50,7 @@ class ProfileViewController: UIViewController {
             photosViewController.albumId = album.id
             self.navigationController?.pushViewController(photosViewController, animated: true)
             
-        }
+        }.disposed(by: bag)
     }
 
 }

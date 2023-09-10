@@ -21,12 +21,14 @@ class ProfileViewModel{
     
     func getUser(id : Int){
         api.fetchData(target: .getUser(id: id), responseClass: UserModel.self, completion: { [weak self] response in
-            self?.userResponse.onNext(response!)
+            guard let response = response else{return}
+            self?.userResponse.onNext(response)
         })
     }
     func getAlbums(forUserId id:Int){
         api.fetchData(target: .getAlbum(userId: id), responseClass: [AlbumModel].self, completion: { [weak self] response in
-            self?.albumResponse.onNext(response!)
+            guard let response = response else{return}
+            self?.albumResponse.onNext(response)
         })
     }
 }
