@@ -11,7 +11,7 @@
 - RxSwift
 -  xib File 
 - Constrains and Auto Layout
-- Swift Package Manager & CocoaPods (Moya(Rx-Moya) , Kingfisher )
+- Swift Package Manager  (Moya(Rx-Moya) , Kingfisher )
 
 # Example Demo
 
