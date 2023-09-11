@@ -6,41 +6,58 @@
 //
 
 import UIKit
-
-class PhotosViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
-    }
+import RxSwift
+import RxCocoa
+import Kingfisher
+class PhotosViewController: UIViewController{
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! CollectionViewCell
-        
-        return cell
-    }
     
     let searchController = UISearchBar()
-    
+    let numberOfCellsPerRow: CGFloat = 3
     var albumId : Int?
     
     @IBOutlet weak var photosCollectionView: UICollectionView!
+    private var viewModel = PhotoViewModel()
+    var bag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.getPhotos(albumId: albumId ?? 0)
+        setupUI()
+        bindDataToCollectionView()
+        searchDataUsingSearchController()
+    }
 
+    private func setupUI(){
         navigationItem.titleView = searchController
         photosCollectionView.register(UINib(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "item")
-        photosCollectionView.dataSource = self
-        photosCollectionView.delegate = self
+        if let flowLayout = photosCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let horizontalSpacing = flowLayout.scrollDirection == .vertical ? flowLayout.minimumInteritemSpacing : flowLayout.minimumLineSpacing
+            let cellWidth = (view.frame.width - max(0, numberOfCellsPerRow - 1)*horizontalSpacing)/numberOfCellsPerRow
+            flowLayout.itemSize = CGSize(width: cellWidth, height: cellWidth)
+        }
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func bindDataToCollectionView(){
+        viewModel.photoResponse.bind(to: photosCollectionView.rx.items(cellIdentifier: "item",cellType: CollectionViewCell.self)){index,photo,cell in
+            
+            cell.imgView.kf.setImage(with: URL(string: photo.url ?? ""))
+        }.disposed(by: bag)
     }
-    */
+    private func searchDataUsingSearchController(){
+        searchController.rx.text.orEmpty.bind(to: viewModel.searchBehavior).disposed(by: bag)
+        searchController.rx.text.orEmpty.throttle(RxTimeInterval.microseconds(100), scheduler: MainScheduler.asyncInstance)
+            .distinctUntilChanged()
+            .subscribe (onNext: { [weak self]_ in
+                if self?.searchController.text == "" {
+                    self?.viewModel.getPhotos(albumId: self?.albumId ?? 0)
+                }else{
+                    self?.viewModel.search()
+                }
+                self?.photosCollectionView.reloadData()
+            }).disposed(by: bag)
+    }
 
 }
+
