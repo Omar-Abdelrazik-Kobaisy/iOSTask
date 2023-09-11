@@ -29,7 +29,7 @@ class PhotoViewModel{
     }
     func search(){
         
-            let dataSearch = searchArr.filter({ $0.title?.contains((searchBehavior.value)) == true })
+        let dataSearch = searchArr.filter({ $0.title?.contains((searchBehavior.value.lowercased())) == true })
             photoResponse.onNext(dataSearch)
         
         
